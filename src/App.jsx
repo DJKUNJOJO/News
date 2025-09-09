@@ -97,16 +97,27 @@ function App() {
           </div>
         )}
         {/* Subscribe UI */}
-        <div className="mt-6 flex items-center gap-2 animate-fade-in">
-          <label className="font-medium text-navy">Subscribe to:</label>
-          <select className="border rounded px-2 py-1 bg-pearl-white text-navy focus:ring-2 focus:ring-sky transition-all">
-            <option>Admissions</option>
-            <option>Academics</option>
-            <option>Cultural</option>
-            <option>Sports</option>
-            <option>Government Notifications</option>
-          </select>
-          <button className="bg-gradient-to-r from-sky to-navy text-pearl-white px-4 py-1 rounded-lg shadow hover:from-navy hover:to-sky hover:text-navy font-semibold transition-all duration-200">Subscribe</button>
+        <div className="mt-8 flex justify-center animate-fade-in">
+          <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-lg border border-sky-light/50 px-8 py-6 flex flex-col md:flex-row items-center gap-6 w-full max-w-2xl">
+            <div className="flex items-center gap-3 mb-4 md:mb-0">
+              <span className="text-3xl bg-sky-light text-navy rounded-full p-2 shadow">📬</span>
+              <div>
+                <div className="font-bold text-lg text-navy mb-1">Stay Updated!</div>
+                <div className="text-navy/70 text-sm">Subscribe to get instant notifications for important updates.</div>
+              </div>
+            </div>
+            <form className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+              <label htmlFor="subscribe-select" className="font-medium text-navy sr-only">Subscribe to:</label>
+              <select id="subscribe-select" className="border border-sky-light rounded px-3 py-2 bg-pearl-white text-navy focus:ring-2 focus:ring-sky transition-all shadow-sm">
+                <option>Admissions</option>
+                <option>Academics</option>
+                <option>Cultural</option>
+                <option>Sports</option>
+                <option>Government Notifications</option>
+              </select>
+              <button type="submit" className="bg-gradient-to-r from-sky to-navy text-pearl-white px-5 py-2 rounded-lg shadow hover:from-navy hover:to-sky hover:text-navy font-semibold transition-all duration-200">Subscribe</button>
+            </form>
+          </div>
         </div>
   </main>
 
@@ -176,6 +187,8 @@ const dummyEvents = [
     date: "2025-09-09",
     type: "Workshop",
     description: "Hands-on session on AI tools and applications.",
+    icon: "🤖",
+    color: "bg-purple-100 text-purple-700",
   },
   {
     id: 2,
@@ -183,6 +196,8 @@ const dummyEvents = [
     date: "2025-09-12",
     type: "Fest",
     description: "Annual cultural extravaganza with music, dance, and drama.",
+    icon: "🎉",
+    color: "bg-pink-100 text-pink-700",
   },
   {
     id: 3,
@@ -190,6 +205,8 @@ const dummyEvents = [
     date: "2025-09-15",
     type: "Seminar",
     description: "Industry experts discuss upcoming technology trends.",
+    icon: "💡",
+    color: "bg-yellow-100 text-yellow-700",
   },
   {
     id: 4,
@@ -197,6 +214,44 @@ const dummyEvents = [
     date: "2025-09-10",
     type: "Exams",
     description: "Midterm exams for all departments.",
+    icon: "📝",
+    color: "bg-blue-100 text-blue-700",
+  },
+  {
+    id: 5,
+    title: "Sports Meet",
+    date: "2025-09-18",
+    type: "Sports",
+    description: "Inter-college athletics and games. Cheer for your teams!",
+    icon: "🏅",
+    color: "bg-green-100 text-green-700",
+  },
+  {
+    id: 6,
+    title: "Blood Donation Camp",
+    date: "2025-09-20",
+    type: "Health",
+    description: "Join the noble cause. Free health checkup for donors.",
+    icon: "🩸",
+    color: "bg-red-100 text-red-700",
+  },
+  {
+    id: 7,
+    title: "Coding Hackathon",
+    date: "2025-09-22",
+    type: "Hackathon",
+    description: "24-hour coding challenge. Prizes for top teams!",
+    icon: "💻",
+    color: "bg-indigo-100 text-indigo-700",
+  },
+  {
+    id: 8,
+    title: "Photography Contest",
+    date: "2025-09-25",
+    type: "Contest",
+    description: "Showcase your photography skills. Open to all students.",
+    icon: "📸",
+    color: "bg-orange-100 text-orange-700",
   },
 ];
 
@@ -265,15 +320,20 @@ function EventSection() {
           <div className="ml-6 text-gray-400">No events found for this filter.</div>
         )}
         {filteredEvents.map((event, idx) => (
-          <div key={event.id} className="ml-6 flex flex-col md:flex-row md:items-center md:justify-between group">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="inline-block w-3 h-3 bg-blue-500 rounded-full group-hover:scale-125 transition-transform"></span>
-                <span className="font-bold">{event.title}</span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 ml-2">{event.type}</span>
+          <div
+            key={event.id}
+            className="ml-6 flex flex-col md:flex-row md:items-center md:justify-between group bg-white/70 rounded-xl shadow-md p-4 border-l-4 border-blue-300 hover:shadow-lg transition-all duration-200 mb-2"
+          >
+            <div className="flex items-center gap-4 mb-2 md:mb-0">
+              <span className={`text-3xl ${event.color} rounded-full p-2 shadow-sm`}>{event.icon}</span>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="font-bold text-lg text-navy">{event.title}</span>
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ml-2 ${event.color}`}>{event.type}</span>
+                </div>
+                <div className="text-gray-500 text-sm mb-1">{event.date}</div>
+                <div className="text-gray-700 mb-2">{event.description}</div>
               </div>
-              <div className="text-gray-500 text-sm mb-1">{event.date}</div>
-              <div className="text-gray-700 mb-2">{event.description}</div>
             </div>
             <div className="flex gap-2 mt-2 md:mt-0">
               {registered.includes(event.id) ? (
