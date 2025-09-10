@@ -414,6 +414,37 @@ function getDateRange(filter) {
   return [today, new Date("2100-01-01")];
 }
 
+function downloadICS(event) {
+  // event: {title, date, description}
+  const dt = new Date(event.date);
+  const dtEnd = new Date(dt.getTime() + 2 * 60 * 60 * 1000); // 2hr event
+  function fmt(d) {
+    return d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  }
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'BEGIN:VEVENT',
+    `DTSTART:${fmt(dt)}`,
+    `DTEND:${fmt(dtEnd)}`,
+    `SUMMARY:${event.title}`,
+    `DESCRIPTION:${event.description || ''}`,
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+  const blob = new Blob([ics], {type: 'text/calendar'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${event.title.replace(/\s+/g,'_')}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 100);
+}
+
 function EventSection() {
   const [filter, setFilter] = useState("Upcoming");
   const [registered, setRegistered] = useState(() => {
@@ -501,13 +532,9 @@ function EventSection() {
               <button
                 ref={el => calendarBtnRefs.current[event.id] = el}
                 className="bg-blue-700 text-white px-3 py-1 rounded hover:bg-blue-600"
-                title="Add this event to your calendar (coming soon)"
-                onClick={e => {
-                  const rect = calendarBtnRefs.current[event.id]?.getBoundingClientRect();
-                  setCalendarModalPos(rect ? { top: rect.top + window.scrollY, left: rect.left + window.scrollX, width: rect.width } : { top: 100, left: 100, width: 400 });
-                  setCalendarModal(event);
-                }}
-                >Add to Calendar</button>
+                title="Download .ics calendar file for this event"
+                onClick={() => downloadICS(event)}
+              >Add to Calendar</button>
               </div>
               </div>
             ))}
